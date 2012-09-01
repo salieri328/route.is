@@ -310,10 +310,22 @@ transparent: true, "visibility": (hillopacity > 1.0), "permalink" : "hill"
     map.events.register("moveend", map, updateLocation);
     map.events.register("changelayer", map, updateLocation);
 
+    // Get the geolocation if we are on mobile device.
+    if (ismobile) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            // Default zoom level for zooming to position is set here.
+            var zoom = 12;
+            // Transform from WGS 1984
+            var fromProjection = new OpenLayers.Projection("EPSG:4326");
+            // to Spherical Mercator Projection
+            var toProjection   = new OpenLayers.Projection("EPSG:900913");
+            // Center the map to the coordinates we got.
+            map.setCenter(new OpenLayers.LonLat(position.coords.longitude,position.coords.latitude).transform(fromProjection, toProjection), zoom);
+        });
+    }
     //XXX this should go somewhere else
     setupRouteView(map);
     initSliders(map);
-
     // give focus to map so zooming works
     document.getElementById('map').focus();
 }
