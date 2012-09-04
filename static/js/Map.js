@@ -219,6 +219,21 @@ function initSliders(map) {
     });
 }
 
+function get_my_url (bounds) {
+	var res = this.map.getResolution();
+	var x = Math.round ((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
+	var y = Math.round ((this.maxExtent.top - bounds.top) / (res * this.tileSize.h));
+	var z = this.map.getZoom();
+	
+	var path = "1.0.0/skikart/" +  z + "/" + x + "/" + y + "." + this.type; 
+	var url = this.url;
+	if (url instanceof Array) {
+		url = this.selectUrl(path, url);
+	}
+	return url + path;
+
+}
+
 /** Initialisation of map object */
 function initMap(tileurl, ismobile) {
     $('#map').text('');
@@ -259,8 +274,15 @@ function initMap(tileurl, ismobile) {
                               "http://c.tile.openstreetmap.org/${z}/${x}/${y}.png"
                            ],
                            { opacity: baseopacity,
-                             numZoomLevels: 19,
+                             numZoomLevels: 15,
                              "permalink" : "base"});
+                             
+	/** Norwegian National Map */			
+    var topo2 = new OpenLayers.Layer.WMS(
+                "Topografisk norgeskart2","http://opencache.statkart.no/gatekeeper/gk/gk.open",
+                {layers: 'topo2', format: 'image/jpeg'},{attribution:'<a href="http://www.statkart.no">Kartverket</a>, <a href="http://www.statkart.no/nor/Land/Fagomrader/         Geovekst/">Geovekst</a> og <a href="http://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194">kommuner</a>'}
+                ); 
+
 
     var layerHiking = new OpenLayers.Layer.OSM("Routes Map",
                            tileurl + "/${z}/${x}/${y}.png",
@@ -300,7 +322,7 @@ transparent: true, "visibility": (hillopacity > 1.0), "permalink" : "hill"
         hill2.setOpacity(hillopacity - 1.0);
 
 
-    map.addLayers([hill, hill2, layerMapnik, layerHiking]);
+    map.addLayers([hill, hill2, topo2, layerHiking]);
 
     if (window.location.href.indexOf("?") == -1) {
         var bounds = new OpenLayers.Bounds(minlon, minlat, maxlon, maxlat);
