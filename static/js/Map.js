@@ -219,21 +219,6 @@ function initSliders(map) {
     });
 }
 
-function get_my_url (bounds) {
-	var res = this.map.getResolution();
-	var x = Math.round ((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
-	var y = Math.round ((this.maxExtent.top - bounds.top) / (res * this.tileSize.h));
-	var z = this.map.getZoom();
-	
-	var path = "1.0.0/skikart/" +  z + "/" + x + "/" + y + "." + this.type; 
-	var url = this.url;
-	if (url instanceof Array) {
-		url = this.selectUrl(path, url);
-	}
-	return url + path;
-
-}
-
 /** Initialisation of map object */
 function initMap(tileurl, ismobile) {
     $('#map').text('');
@@ -274,7 +259,7 @@ function initMap(tileurl, ismobile) {
                               "http://c.tile.openstreetmap.org/${z}/${x}/${y}.png"
                            ],
                            { opacity: baseopacity,
-                             numZoomLevels: 15,
+                             numZoomLevels: 19,
                              "permalink" : "base"});
                              
 	/** Norwegian National Map */			
