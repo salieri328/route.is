@@ -321,7 +321,10 @@ transparent: true, "visibility": (hillopacity > 1.0), "permalink" : "hill"
             var toProjection   = new OpenLayers.Projection("EPSG:900913");
             // Center the map to the coordinates we got.
             map.setCenter(new OpenLayers.LonLat(position.coords.longitude,position.coords.latitude).transform(fromProjection, toProjection), zoom);
-        });
+        },
+        function(e) {
+            // Empty error function for now.
+        }, { enableHighAccuracy: true });
     }
     //XXX this should go somewhere else
     setupRouteView(map);
